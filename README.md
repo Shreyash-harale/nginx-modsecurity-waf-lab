@@ -3,28 +3,29 @@
 An isolated cybersecurity home lab demonstrating web application vulnerability mitigation using an **Nginx Reverse Proxy** integrated with **ModSecurity v3** and the **OWASP Core Rule Set (CRS)** in front of a containerized vulnerable target (**DVWA**).
 
 ---
-
 ## 🏗️ Architecture Overview
 
 Traffic flows from the client to the Nginx reverse proxy where ModSecurity inspects HTTP request payloads at Layer 7 before routing clean requests to the backend application:
 
+```text
 [ Client / Attacker ]
-│ (HTTP Requests on Port 80)
-▼
+         │ (HTTP Requests on Port 80)
+         ▼
 ┌────────────────────────────────────────────────────────┐
-│ Nginx Reverse Proxy + ModSecurity v3 WAF │
-│ - Inspects URI, Headers, and Body │
-│ - OWASP Core Rule Set (CRS) Detection Engine │
-│ │
-│ [ Malicious Payload ] ──> HTTP 403 Forbidden (Drop) │
-│ [ Clean Request ] ──> Proxy Pass to Port 8080 │
+│ Nginx Reverse Proxy + ModSecurity v3 WAF               │
+│ - Inspects URI, Headers, and Body                      │
+│ - OWASP Core Rule Set (CRS) Detection Engine           │
+│                                                        │
+│  [ Malicious Payload ] ──> HTTP 403 Forbidden (Drop)   │
+│  [ Clean Request ]     ──> Proxy Pass to Port 8080     │
 └────────────────────────────────────────────────────────┘
-│
-▼
+                         │
+                         ▼
 ┌────────────────────────────────────────────────────────┐
-│ Docker Container (127.0.0.1:8080) │
-│ - Damn Vulnerable Web Application (DVWA) │
+│ Docker Container (127.0.0.1:8080)                      │
+│ - Damn Vulnerable Web Application (DVWA)               │
 └────────────────────────────────────────────────────────┘
+```
 
 ---
 
